@@ -1,9 +1,5 @@
 <?php
 
-/**
- * @author BRAMILLE Sébastien <contact@oktapodia.com>
- */
-
 namespace Maxmind\Bundle\GeoipBundle\Twig;
 
 use Maxmind\Bundle\GeoipBundle\Service\GeoipManager;
@@ -11,6 +7,8 @@ use Twig_Environment;
 
 /**
  * Class GeoipExtension
+ *
+ * @author BRAMILLE Sébastien <contact@oktapodia.com>
  */
 class GeoipExtension extends \Twig_Extension
 {
@@ -47,7 +45,7 @@ class GeoipExtension extends \Twig_Extension
                 array($this, 'getCode'),
                 array(
                     'is_safe' => array('html'),
-                    'needs_environment' => true
+                    'needs_environment' => true,
                 )
             ),
         );
@@ -66,7 +64,9 @@ class GeoipExtension extends \Twig_Extension
     /**
      * @param Twig_Environment $env
      * @param $template
+     *
      * @return bool|mixed
+     *
      * @throws \Twig_Error_Runtime
      */
     public function getCode(Twig_Environment $env, $template)
@@ -74,11 +74,12 @@ class GeoipExtension extends \Twig_Extension
         if ($env->hasExtension('demo')) {
             $functions = $env->getExtension('demo')->getFunctions();
             foreach ($functions as $function) {
-                if ($function->getName() === 'code') {
+                if ('code' === $function->getName()) {
                     return call_user_func($function->getCallable(), $template);
                 }
             }
         }
+
         return false;
     }
 
