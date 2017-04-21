@@ -59,33 +59,42 @@ EOT
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $source = $input->getArgument('source');
-        if ($this->dataFilePath) {
-            $dataDir = dirname($this->dataFilePath);
-        } else {
-            $bundlePath = $this->getApplication()->getKernel()->getBundle('MaxmindGeoipBundle')->getPath();
-            $dataDir = sprintf('%s', $bundlePath.'/../../../../data/');
-        }
+
         $filename = basename($source);
-        $destination = sprintf('%s/%s', $dataDir, $filename);
-        $verbose = $output instanceof Output && $output->isVerbose();
-        if ($verbose) {
+        $destination = sprintf('%s/%s', $this->recoverDataDir(), $filename);
+
+        if ($output->isVerbose()) {
             $output->writeln(sprintf('Start downloading "%s" to "%s"', $source, $destination));
             $output->writeln('...');
         }
+
         if (!copy($source, $destination)) {
             $output->writeln('<error>Error during file download occured</error>');
 
             return 1;
         }
 
-        if ($verbose) {
+        if ($output->isVerbose()) {
             $output->writeln('<info>Download completed</info>');
             $output->writeln('Unzip the downloading data');
             $output->writeln('...');
         }
+
         system('gunzip -f "'.$destination.'"');
-        if ($verbose) {
+
+        if ($output->isVerbose()) {
             $output->writeln('<info>Unzip completed</info>');
         }
+    }
+
+    public function recoverDataDir()
+    {
+        if ($this->dataFilePath) {
+            return(dirname($this->dataFilePath));
+        }
+
+        $bundlePath = $this->getApplication()->getKernel()->getBundle('MaxmindGeoipBundle')->getPath();
+
+        return(sprintf('%s', $bundlePath.'/../../../../data/'));
     }
 }
