@@ -13,15 +13,15 @@ class LoadDataCommand extends Command
     protected $dataFilePath;
 
     /**
-     * @param mixed $dataFilePath
+     * The constructor.
      *
-     * @return self
+     * @param mixed $dataFilePath
      */
-    public function setDataFilePath($dataFilePath)
+    public function __construct($dataFilePath)
     {
-        $this->dataFilePath = $dataFilePath;
+        parent::__construct();
 
-        return $this;
+        $this->dataFilePath = $dataFilePath;
     }
 
     protected function configure()

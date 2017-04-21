@@ -13,7 +13,7 @@ services:
 
     maxmind_bundle_geoip.command.load_data_command:
         class: Maxmind\Bundle\GeoipBundle\Command\LoadDataCommand
-        calls:
-            - [ setDataFilePath, ['%maxmind_geoip_data_file_path%'] ]
+        arguments:
+            - '%maxmind_geoip_data_file_path%'
         tags:
             - { name: console.command }
